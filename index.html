@@ -64,10 +64,16 @@ label{font-size:.8rem;color:var(--mute)}
 <script>
 window.claude={use:async n=>{
 if(n==="sample"){const f=()=>{};f.json=async p=>{
-const k=localStorage.getItem("mx_key");if(!k){const e=new Error("nokey");e.code="nokey";throw e}
-const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-5-5",max_tokens:2000,messages:[{role:"user",content:p}]})});
-if(!r.ok){const e=new Error("ai");e.code=r.status===429?"rate_limited":"error";throw e}
-const j=await r.json();const t=(j.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))};return f}
+const k=(localStorage.getItem("mx_gkey")||"").trim();if(!k){const e=new Error("nokey");e.code="nokey";throw e}
+let last;
+for(const m of ["gemini-3.5-flash","gemini-2.5-flash"]){
+const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"content-type":"application/json","x-goog-api-key":k},body:JSON.stringify({contents:[{role:"user",parts:[{text:p}]}],generationConfig:{responseMimeType:"application/json"}})});
+if(r.ok){const j=await r.json();const t=((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(x=>x.text||"").join("");return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}
+let msg="";try{msg=(await r.json()).error.message}catch(_){}
+const zero=/limit: 0/.test(msg);
+last=new Error(r.status+": "+msg);last.code=(r.status===429&&!zero)?"rate_limited":"error";
+if(!(r.status===404||(r.status===429&&zero)))break}
+throw last};return f}
 if(n==="downloads")return{save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;a.click()}};
 return null}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
@@ -127,7 +133,7 @@ async function ask(job,text,keep){
     (r.approvals||[]).forEach(a=>{if(a&&a.title){S.approvals.push({id:S.n++,level:+a.level===3?3:2,title:a.title,detail:a.detail||"",status:"منتظر"});log("درخواست تأیید: "+a.title)}});
     (r.done||[]).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});
     save();
-  }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید هوش مصنوعی را در بخش «کلید هوش مصنوعی» همین صفحه وارد کنید.":"پاسخ دریافت نشد؛ اینترنت یا کلید را بررسی کنید.")}
+  }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید Gemini را در بخش «کلید Gemini» همین صفحه وارد کنید.":"پاسخ دریافت نشد. علت: "+(e&&e.message||"نامشخص"))}
   lastReply=reply;busy=false;orb();say("آماده‌ام");render();
   if(speakOn)await speak(reply);
   if(conv&&tab==="asst")listen();
@@ -160,7 +166,7 @@ function view(){
 <div class="glass box" id="reply" ${lastReply?"":'style="display:none"'}>${esc(lastReply)}</div>
 <div class="glass box"><textarea id="inp" placeholder="بگویید یا بنویسید: برای فردا ساعت ۱۰ با آقای احمدی تماس بگیر، و پیش‌نویس پیشنهاد قیمت بنویس..."></textarea>
 <div class="row"><button class="go grow" data-a="send">ارسال</button><button class="sm" data-a="conv" aria-pressed="${conv}">${conv?"🎧 گفتگوی پیوسته: روشن":"🎧 گفتگوی پیوسته"}</button><button class="sm" data-a="mute" aria-pressed="${speakOn}">${speakOn?"🔊 صدا":"🔇 بی‌صدا"}</button><button class="sm" data-a="stop">⏹</button></div></div>
-<details class="glass box"><summary>🔑 کلید هوش مصنوعی (فقط روی همین گوشی ذخیره می‌شود)</summary><input id="akey" type="password" autocomplete="off" placeholder="${localStorage.getItem("mx_key")?"ذخیره شده ✓ (برای تغییر، کلید جدید را بنویسید)":"sk-ant-..."}" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);font:inherit"></details>
+<details class="glass box"><summary>🔑 کلید Gemini (از aistudio.google.com؛ فقط روی همین گوشی ذخیره می‌شود)</summary><input id="akey" type="password" autocomplete="off" placeholder="${localStorage.getItem("mx_gkey")?"ذخیره شده ✓ (برای تغییر، کلید جدید را بنویسید)":"AIza..."}" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);font:inherit"></details>
 <details class="glass box"><summary>🎚️ تنظیم صدای دستیار</summary>
 <label>انتخاب صدا ${fa.length?"":"(صدای فارسی روی این دستگاه یافت نشد)"}</label>
 <select id="vsel"><option value="">خودکار (بهترین صدای فارسی)</option>${list.map(v=>`<option value="${esc(v.name)}" ${v.name===S.v.voice?"selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
@@ -218,7 +224,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset&&t.dataset.chk){const k=S.tasks.find(x=>x.id==t.dataset.chk);if(k){k.done=t.checked;log((k.done?"انجام شد: ":"بازگشت: ")+k.text);save();render()}}
-  if(t.id==="akey"&&t.value.trim()){localStorage.setItem("mx_key",t.value.trim());t.value="";t.placeholder="ذخیره شد ✓"}if(t.id==="vsel"){S.v.voice=t.value;save()}
+  if(t.id==="akey"&&t.value.trim()){localStorage.setItem("mx_gkey",t.value.trim());t.value="";t.placeholder="ذخیره شد ✓"}if(t.id==="vsel"){S.v.voice=t.value;save()}
   if(t.id==="vrate"){S.v.rate=t.value;save()}
   if(t.id==="vpitch"){S.v.pitch=t.value;save()}
 });
