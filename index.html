@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#070B14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MahanX AI">
+<title>MAHANX EXECUTIVE AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070B14;--glass:rgba(255,255,255,.06);--edge:rgba(140,200,255,.18);--ink:#E6F0FF;--mute:#8CA0BD;--c1:#22D3EE;--c2:#8B5CF6;--hot:#FB7185;--amb:#FBBF24;--ok:#34D399;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{color-scheme:dark;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.8;min-height:100vh;background:radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.28),transparent 60%),radial-gradient(700px 500px at 0% 30%,rgba(34,211,238,.16),transparent 60%),var(--bg);background-attachment:fixed}
+main{max-width:700px;margin:0 auto;padding:14px}
+.glass{background:var(--glass);border:1px solid var(--edge);border-radius:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:1rem;font-weight:800;margin:0;letter-spacing:1px}
+h1 span{background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat{font-size:.76rem;color:var(--mute)}
+.nav{display:flex;gap:6px;overflow-x:auto;margin:10px 0;padding-bottom:4px}
+.nav button{white-space:nowrap}
+.sm{padding:8px 13px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);border-radius:12px;font:inherit;font-size:.82rem;cursor:pointer}
+.sm[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:800}
+.go{padding:11px 18px;border:0;border-radius:12px;background:linear-gradient(90deg,var(--c1),var(--c2));color:#06101c;font:inherit;font-weight:800;cursor:pointer}
+button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+.hero{display:flex;flex-direction:column;align-items:center;padding:20px 12px 14px;margin:6px 0}
+.orb{width:120px;height:120px;border-radius:50%;border:0;cursor:pointer;position:relative;background:radial-gradient(circle at 35% 30%,#fff 0,var(--c1) 22%,var(--c2) 62%,#1b1040 100%);box-shadow:0 0 40px rgba(34,211,238,.55),0 0 90px rgba(139,92,246,.4),inset 0 0 30px rgba(255,255,255,.25);animation:idle 4s ease-in-out infinite}
+.orb::before,.orb::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid var(--edge)}
+.orb::after{inset:-30px;border-style:dashed;opacity:.5;animation:spin 24s linear infinite}
+.orb.listen{animation:pulse .9s ease-in-out infinite;filter:hue-rotate(120deg)}.orb.speak{animation:pulse 1.3s ease-in-out infinite}.orb.think{animation:spin 1.6s linear infinite}
+@keyframes idle{50%{transform:scale(1.04)}}@keyframes pulse{50%{transform:scale(1.13)}}@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.orb,.orb::after{animation:none!important}}
+.say{margin-top:24px;text-align:center;color:var(--mute);font-size:.9rem;min-height:1.8em}
+.box{padding:12px 14px;margin:10px 0;white-space:pre-wrap}
+textarea{width:100%;min-height:64px;border:0;outline:0;resize:vertical;background:transparent;color:var(--ink);font:inherit}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:0 0 auto}.grow{flex:1!important}
+.item{display:flex;gap:10px;padding:11px 12px;margin:6px 0;border-radius:16px;align-items:flex-start}
+.item input[type=checkbox]{margin-top:7px;width:20px;height:20px;accent-color:var(--c1)}
+.item .t{flex:1}.p0{border-right:3px solid var(--hot)}.p1{border-right:3px solid var(--amb)}.p2{border-right:3px solid var(--c1)}.done{opacity:.45}.done b{text-decoration:line-through}
+.meta{font-size:.76rem;color:var(--mute)}
+.bar{height:6px;border-radius:9px;background:var(--edge);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--c1),var(--c2))}
+.x{border:0;background:none;color:var(--mute);cursor:pointer;font-size:1.1rem}
+.empty{color:var(--mute);padding:18px;text-align:center}
+.alert{background:linear-gradient(90deg,var(--amb),var(--hot));color:#1a0a0a;border-radius:14px;padding:10px 14px;margin:8px 0;font-weight:800}
+.lv{display:inline-block;padding:0 8px;border-radius:9px;font-size:.72rem;font-weight:800;color:#06101c}.l2{background:var(--amb)}.l3{background:var(--hot)}
+select,input[type=range]{width:100%;background:var(--glass);color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:6px;font:inherit}
+label{font-size:.8rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><h1><span>MAHANX</span> EXECUTIVE AI</h1><div class="stat" id="stat"></div></div>
+<div id="alerts" aria-live="polite"></div>
+<div class="nav" id="nav"></div>
+<div id="view"></div>
+</main>
+
+<script>
+window.claude={use:async n=>{
+if(n==="sample"){const f=()=>{};f.json=async p=>{
+const k=localStorage.getItem("mx_key");if(!k){const e=new Error("nokey");e.code="nokey";throw e}
+const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-5-5",max_tokens:2000,messages:[{role:"user",content:p}]})});
+if(!r.ok){const e=new Error("ai");e.code=r.status===429?"rate_limited":"error";throw e}
+const j=await r.json();const t=(j.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))};return f}
+if(n==="downloads")return{save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;a.click()}};
+return null}};
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+<script>
+const CATS={"شرکت":["فروش","تعمیرات","حسابداری","تأمین","بحران","توسعه","MahanX"],"شخصی":["خانواده","دوستان","مالی","رشد فردی","متفرقه"]};
+const URG={"الان":0,"امروز":1,"این هفته":2};
+const TABS=[["asst","🎙️ دستیار"],["tasks","✅ کارها"],["proj","📦 پروژه‌ها"],["appr","🛡️ تأییدها"],["mem","🧠 حافظه"],["rep","📊 گزارش"]];
+const MX=["پنل مدیریت مرکزی","پنل مدیران استانی","پنل کشاورزان و کارشناسان","ثبت و مدیریت زمین‌ها","ماشین‌آلات و ارائه‌دهندگان خدمات","سوخت، سهمیه و کیف پول","گزارش‌ها و داشبورد","قابلیت‌های هوش مصنوعی","APIها و سرویس‌های بیرونی","کنترل کیفیت و آزمون"];
+let S={tasks:[],projects:[],approvals:[],memory:[],log:[],n:1,v:{voice:"",rate:.95,pitch:1}};
+let tab="asst",space="همه",busy=false,speakOn=true,conv=false,lastReply="",lastSay="برای صحبت روی گوی بزنید",rec=null,confirm3=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>{try{return new Date(d).toLocaleString("fa-IR",{weekday:"short",hour:"2-digit",minute:"2-digit",month:"numeric",day:"numeric"})}catch(e){return d}};
+const today=()=>new Date().toLocaleDateString("fa-IR");
+function load(){try{const r=localStorage.getItem("mahanx_v3")||localStorage.getItem("nexus_v2");if(r){const o=JSON.parse(r);S=Object.assign(S,o);S.v=Object.assign({voice:"",rate:.95,pitch:1},o.v||{});S.tasks.forEach(t=>{if(!t.space)t.space="شرکت"})}}catch(e){}}
+function save(){try{localStorage.setItem("mahanx_v3",JSON.stringify(S))}catch(e){}}
+function log(m){S.log.unshift({d:new Date().toISOString(),m});S.log=S.log.slice(0,60)}
+function orb(c){const o=$("orb");if(o)o.className="orb "+(c||"")}
+function say(t){lastSay=t;const s=$("say");if(s)s.textContent=t}
+
+// ---- voice out ----
+function voices(){try{return speechSynthesis.getVoices()}catch(e){return[]}}
+function bestVoice(){const vs=voices();return vs.find(v=>v.name===S.v.voice)||vs.find(v=>/^fa/i.test(v.lang))||null}
+let spkId=0;
+function speak(t){return new Promise(res=>{
+  if(!("speechSynthesis" in window)||!t){res();return}
+  const id=++spkId;try{speechSynthesis.cancel()}catch(e){}
+  const parts=String(t).replace(/[*#_`]/g,"").split(/(?<=[.!؟?\n،:])\s+/).filter(x=>x.trim());
+  const v=bestVoice();let i=0;
+  const next=()=>{if(id!==spkId||i>=parts.length){orb();res();return}
+    const u=new SpeechSynthesisUtterance(parts[i++]);u.lang=v?v.lang:"fa-IR";if(v)u.voice=v;u.rate=+S.v.rate;u.pitch=+S.v.pitch;
+    u.onstart=()=>orb("speak");u.onend=next;u.onerror=()=>{orb();res()};speechSynthesis.speak(u)};
+  next()})}
+function stopSpeak(){spkId++;try{speechSynthesis.cancel()}catch(e){}orb()}
+
+// ---- AI ----
+const RULES=`تو MAHANX EXECUTIVE AI هستی: دستیار شخصی و مدیر اجرایی شرکت پهپاد کشاورزی و تصویربرداری و اکوسیستم MahanX/AGRIX. فارسی طبیعی و روان، کوتاه و مستقیم و مناسب شنیدن (حداکثر ۵ جمله، بدون ستاره و علامت). اولویت‌ها را با اهمیت، فوریت، اثر مالی، ریسک و وابستگی بسنج. درخواست کلی را به کارهای کوچک تبدیل کن. قانون صداقت: هیچ ابزار بیرونی (ایمیل، پیامک، تقویم، پایگاه داده) متصل نیست؛ هرگز ادعا نکن چیزی ارسال یا اجرا شده، فقط ثبت، برنامه‌ریزی و پیش‌نویس. وجود هر API یا ماژول MahanX را فرض نکن. اقدام سطح ۲ (پیام به مشتری، پیشنهاد تجاری، تعهد، انتشار) و سطح ۳ (پرداخت، قرارداد، حذف دائمی، تغییر مجوز، انتشار نسخه) را فقط در approvals بگذار با پیش‌نویس کامل در detail.`;
+async function ask(job,text,keep){
+  if(busy)return;busy=true;orb("think");say("در حال فکر کردن...");
+  let sample=null;try{sample=await claude.use("sample")}catch(e){}
+  if(!sample){say("دستیار هوشمند در دسترس نیست؛ صفحه را دوباره باز کنید.");orb();busy=false;return null}
+  const ctx={tasks:S.tasks.filter(t=>!t.done).map(t=>({id:t.id,text:t.text,space:t.space,cat:t.cat,urgency:t.urgency,due:t.due,project:t.project})),projects:S.projects.map(p=>p.name),decisions:S.memory.slice(0,8).map(m=>m.text)};
+  const prompt=`${RULES}
+الان: ${new Date().toString()}
+وضعیت: ${JSON.stringify(ctx)}
+وظیفه: ${job}
+ورودی مدیر: ${text||"-"}
+فقط JSON معتبر: {"reply":"","tasks":[{"text":"","space":"شرکت|شخصی","cat":"شرکت: ${CATS["شرکت"].join("/")} | شخصی: ${CATS["شخصی"].join("/")}","urgency":"الان|امروز|این هفته","due":"YYYY-MM-DDTHH:MM محلی یا خالی","project":"نام پروژه یا خالی"}],"projects":[{"name":"","goal":"","owner":"","due":""}],"decisions":[{"text":"","why":""}],"approvals":[{"level":2,"title":"","detail":""}],"done":[]}`;
+  let reply="";
+  try{
+    const r=await sample.json(prompt,{cache:false});reply=r.reply||"";
+    (r.projects||[]).forEach(p=>{if(p&&p.name&&!S.projects.some(x=>x.name===p.name)){S.projects.push({id:S.n++,name:p.name,goal:p.goal||"",owner:p.owner||"",due:p.due||"",note:""});log("پروژه: "+p.name)}});
+    (r.tasks||[]).forEach(t=>{if(t&&t.text){const sp=t.space==="شخصی"?"شخصی":"شرکت";S.tasks.push({id:S.n++,text:t.text,space:sp,cat:CATS[sp].includes(t.cat)?t.cat:CATS[sp][CATS[sp].length-1],urgency:URG[t.urgency]!==undefined?t.urgency:"این هفته",due:t.due||"",project:t.project||"",done:false,fired:false});log("کار: "+t.text)}});
+    (r.decisions||[]).forEach(d=>{if(d&&d.text){S.memory.unshift({id:S.n++,date:today(),text:d.text,why:d.why||"",src:"گفت‌وگو"});log("تصمیم ثبت شد")}});
+    (r.approvals||[]).forEach(a=>{if(a&&a.title){S.approvals.push({id:S.n++,level:+a.level===3?3:2,title:a.title,detail:a.detail||"",status:"منتظر"});log("درخواست تأیید: "+a.title)}});
+    (r.done||[]).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});
+    save();
+  }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید هوش مصنوعی را در بخش «کلید هوش مصنوعی» همین صفحه وارد کنید.":"پاسخ دریافت نشد؛ اینترنت یا کلید را بررسی کنید.")}
+  lastReply=reply;busy=false;orb();say("آماده‌ام");render();
+  if(speakOn)await speak(reply);
+  if(conv&&tab==="asst")listen();
+  return reply;
+}
+
+// ---- voice in ----
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function listen(){
+  if(!SR){say("مرورگر شما دستور صوتی را پشتیبانی نمی‌کند؛ بنویسید.");return}
+  if(rec){rec.stop();return}
+  stopSpeak();rec=new SR();rec.lang="fa-IR";let got="";
+  rec.onresult=e=>{got=Array.from(e.results).map(r=>r[0].transcript).join(" ");say(got)};
+  rec.onend=()=>{rec=null;orb();if(got.trim())ask("درخواست را اجرا کن: کار ثبت کن، مشورت بده یا پیش‌نویس بنویس.",got);else{conv=false;say("چیزی نشنیدم؛ دوباره امتحان کنید");render()}};
+  rec.onerror=()=>{rec=null;orb();conv=false;say("میکروفون در دسترس نیست")};
+  try{rec.start();orb("listen");say("گوش می‌دهم...")}catch(e){rec=null}
+}
+
+// ---- views ----
+function head(){
+  const o=S.tasks.filter(t=>!t.done);
+  $("stat").textContent=`${o.length} کار · ${o.filter(t=>t.urgency==="الان").length} فوری · ${S.approvals.filter(a=>a.status==="منتظر").length} منتظر تأیید`;
+  $("nav").innerHTML=TABS.map(([k,l])=>`<button class="sm" data-tab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("");
+}
+function taskHtml(t){return `<div class="glass item p${URG[t.urgency]??2} ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} data-chk="${t.id}" aria-label="انجام شد"><div class="t"><b>${esc(t.text)}</b><div class="meta">${esc(t.space)} / ${esc(t.cat)} · ${esc(t.urgency)}${t.project?" · 📦 "+esc(t.project):""}${t.due?" · ⏰ "+esc(fmt(t.due)):""}</div></div><button class="x" data-del="${t.id}" aria-label="حذف">✕</button></div>`}
+function view(){
+  if(tab==="asst"){
+    const vs=voices();const fa=vs.filter(v=>/^fa/i.test(v.lang));const list=fa.length?fa:vs;
+    return `<section class="glass hero"><button class="orb" id="orb" data-a="orb" aria-label="صحبت با دستیار"></button><div class="say" id="say">${esc(lastSay)}</div></section>
+<div class="glass box" id="reply" ${lastReply?"":'style="display:none"'}>${esc(lastReply)}</div>
+<div class="glass box"><textarea id="inp" placeholder="بگویید یا بنویسید: برای فردا ساعت ۱۰ با آقای احمدی تماس بگیر، و پیش‌نویس پیشنهاد قیمت بنویس..."></textarea>
+<div class="row"><button class="go grow" data-a="send">ارسال</button><button class="sm" data-a="conv" aria-pressed="${conv}">${conv?"🎧 گفتگوی پیوسته: روشن":"🎧 گفتگوی پیوسته"}</button><button class="sm" data-a="mute" aria-pressed="${speakOn}">${speakOn?"🔊 صدا":"🔇 بی‌صدا"}</button><button class="sm" data-a="stop">⏹</button></div></div>
+<details class="glass box"><summary>🔑 کلید هوش مصنوعی (فقط روی همین گوشی ذخیره می‌شود)</summary><input id="akey" type="password" autocomplete="off" placeholder="${localStorage.getItem("mx_key")?"ذخیره شده ✓ (برای تغییر، کلید جدید را بنویسید)":"sk-ant-..."}" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);font:inherit"></details>
+<details class="glass box"><summary>🎚️ تنظیم صدای دستیار</summary>
+<label>انتخاب صدا ${fa.length?"":"(صدای فارسی روی این دستگاه یافت نشد)"}</label>
+<select id="vsel"><option value="">خودکار (بهترین صدای فارسی)</option>${list.map(v=>`<option value="${esc(v.name)}" ${v.name===S.v.voice?"selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select>
+<label>سرعت</label><input type="range" id="vrate" min=".6" max="1.3" step=".05" value="${S.v.rate}">
+<label>زیروبمی</label><input type="range" id="vpitch" min=".7" max="1.4" step=".05" value="${S.v.pitch}">
+<div class="row" style="margin-top:8px"><button class="sm" data-a="test">▶ شنیدن نمونه</button></div></details>`;
+  }
+  if(tab==="tasks"){
+    let ts=S.tasks.filter(t=>space==="همه"||t.space===space).sort((a,b)=>(a.done-b.done)||((URG[a.urgency]??2)-(URG[b.urgency]??2))||String(a.due||"z").localeCompare(String(b.due||"z")));
+    return `<div class="row">${["همه","شرکت","شخصی"].map(s=>`<button class="sm" data-sp="${s}" aria-pressed="${s===space}">${s}</button>`).join("")}<button class="sm" data-a="clr">پاک‌کردن انجام‌شده‌ها</button></div>`+(ts.length?ts.map(taskHtml).join(""):`<div class="empty">کاری نیست. از بخش دستیار بگویید.</div>`);
+  }
+  if(tab==="proj"){
+    return `<div class="row"><button class="sm" data-a="seed">+ ماژول‌های MahanX</button><button class="sm" data-a="projplan">🧠 تقسیم پروژه‌ها به کار</button></div>`+(S.projects.length?S.projects.map(p=>{const ts=S.tasks.filter(t=>t.project===p.name);const d=ts.filter(t=>t.done).length;const pc=ts.length?Math.round(d/ts.length*100):0;return `<div class="glass item"><div class="t"><b>${esc(p.name)}</b><div class="meta">${p.goal?esc(p.goal)+" · ":""}${p.owner?"مسئول: "+esc(p.owner)+" · ":""}${p.due?"موعد: "+esc(p.due)+" · ":""}${ts.length?d+" از "+ts.length+" کار":"بدون کار ثبت‌شده"} · وضعیت فنی: بررسی‌نشده</div><div class="bar"><i style="width:${pc}%"></i></div></div><button class="x" data-delp="${p.id}" aria-label="حذف">✕</button></div>`}).join(""):`<div class="empty">پروژه‌ای نیست. دکمه بالا را بزنید یا بگویید «پروژه جدید».</div>`);
+  }
+  if(tab==="appr"){
+    const a=S.approvals.slice().reverse();
+    return `<div class="box glass meta">این برنامه خودش چیزی ارسال یا اجرا نمی‌کند؛ تأیید شما فقط پیش‌نویس را «تأییدشده» ثبت می‌کند تا خودتان کپی و ارسال کنید.</div>`+(a.length?a.map(x=>`<div class="glass item"><div class="t"><span class="lv l${x.level}">سطح ${x.level===3?"۳ (تأیید قوی)":"۲"}</span> <b>${esc(x.title)}</b><div class="box" style="padding:6px 0;margin:4px 0">${esc(x.detail)}</div><div class="meta">وضعیت: ${esc(x.status)}</div>${x.status==="منتظر"?`<div class="row"><button class="go" data-ok="${x.id}">${confirm3===x.id?"تأیید نهایی":"تأیید"}</button><button class="sm" data-no="${x.id}">رد</button><button class="sm" data-copy="${x.id}">کپی متن</button></div>`:""}</div></div>`).join(""):`<div class="empty">موردی منتظر تأیید نیست.</div>`);
+  }
+  if(tab==="mem"){
+    return `<h3>تصمیم‌های ثبت‌شده</h3>`+(S.memory.length?S.memory.map(m=>`<div class="glass item"><div class="t"><b>${esc(m.text)}</b><div class="meta">${esc(m.date)}${m.why?" · "+esc(m.why):""}</div></div><button class="x" data-delm="${m.id}" aria-label="حذف">✕</button></div>`).join(""):`<div class="empty">بگویید «تصمیم ثبت کن: ...»</div>`)+`<h3>سابقه اقدامات</h3>`+(S.log.length?S.log.slice(0,25).map(l=>`<div class="meta">${esc(new Date(l.d).toLocaleString("fa-IR"))} — ${esc(l.m)}</div>`).join(""):`<div class="empty">هنوز سابقه‌ای نیست.</div>`)+`<div class="row" style="margin-top:12px"><button class="sm" data-a="exp">پشتیبان‌گیری</button></div>`;
+  }
+  return `<div class="row"><button class="sm" data-rep="گزارش صبحگاهی: مهم‌ترین اولویت‌ها، قرارها و مهلت‌ها، کارهای عقب‌افتاده، تصمیم‌های لازم و مهم‌ترین اقدام برای پیشرفت شرکت.">🌅 صبحگاهی</button><button class="sm" data-rep="گزارش پایان روز: انجام‌شده‌ها، ناتمام‌ها، علت تأخیر، موانع و ریسک‌ها و برنامه فردا.">🌙 پایان روز</button><button class="sm" data-rep="گزارش هفتگی شرکت: وضعیت پروژه‌ها، پیشرفت MahanX، کارهای عقب‌افتاده، تصمیم‌های معوق، ریسک‌های اصلی و برنامه هفته بعد.">📅 هفتگی</button></div><div class="glass box" id="repbox">${lastReply?esc(lastReply):"یک گزارش انتخاب کنید؛ متن آن نمایش داده و با صدا خوانده می‌شود."}</div>`;
+}
+function render(){
+  head();const v=$("view");const keep=$("inp")?$("inp").value:"";v.innerHTML=view();if($("inp"))$("inp").value=keep;
+  if(busy)orb("think");
+}
+
+// ---- events ----
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+  if(d.tab){tab=d.tab;render();return}
+  if(d.sp){space=d.sp;render();return}
+  if(d.chk!==undefined)return;
+  if(d.del){S.tasks=S.tasks.filter(x=>x.id!=d.del);save();render();return}
+  if(d.delp){S.projects=S.projects.filter(x=>x.id!=d.delp);save();render();return}
+  if(d.delm){S.memory=S.memory.filter(x=>x.id!=d.delm);save();render();return}
+  if(d.rep){ask(d.rep,"",1);return}
+  if(d.ok){const a=S.approvals.find(x=>x.id==d.ok);if(!a)return;if(a.level===3&&confirm3!==a.id){confirm3=a.id;render();return}a.status="تأییدشده";confirm3=null;log("تأیید شد: "+a.title);save();render();return}
+  if(d.no){const a=S.approvals.find(x=>x.id==d.no);if(a){a.status="ردشده";log("رد شد: "+a.title);save();render()}return}
+  if(d.copy){const a=S.approvals.find(x=>x.id==d.copy);try{navigator.clipboard.writeText(a.detail);b.textContent="کپی شد"}catch(_){b.textContent="کپی ممکن نیست"}return}
+  switch(d.a){
+    case"orb":listen();break;
+    case"send":{const t=$("inp").value.trim();if(t){$("inp").value="";ask("درخواست را اجرا کن: کار ثبت کن، مشورت بده یا پیش‌نویس بنویس.",t)}break}
+    case"conv":conv=!conv;render();if(conv)listen();break;
+    case"mute":speakOn=!speakOn;if(!speakOn)stopSpeak();render();break;
+    case"stop":stopSpeak();conv=false;if(rec)rec.stop();render();break;
+    case"test":speak("سلام، من دستیار اجرایی ماهان‌ایکس هستم. آماده‌ام تا کارهای شما را منظم کنم.");break;
+    case"clr":S.tasks=S.tasks.filter(t=>!t.done);save();render();break;
+    case"seed":MX.forEach(n=>{if(!S.projects.some(p=>p.name===n))S.projects.push({id:S.n++,name:"MahanX · "+n,goal:"",owner:"",due:""})});log("ماژول‌های MahanX اضافه شد");save();render();break;
+    case"projplan":ask("برای پروژه‌های بدون کار، حداکثر ۸ کار اجرایی کوچک با فیلد project مناسب بساز و اولویت‌بندی کن. بدون فرض وجود هیچ ماژول.","",1);break;
+    case"exp":(async()=>{try{const dl=await claude.use("downloads");if(dl){await dl.save({filename:"mahanx-backup.json",data:JSON.stringify(S,null,2)});return}}catch(_){}say("ذخیره فایل ممکن نیست")})();break;
+  }
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.chk){const k=S.tasks.find(x=>x.id==t.dataset.chk);if(k){k.done=t.checked;log((k.done?"انجام شد: ":"بازگشت: ")+k.text);save();render()}}
+  if(t.id==="akey"&&t.value.trim()){localStorage.setItem("mx_key",t.value.trim());t.value="";t.placeholder="ذخیره شد ✓"}if(t.id==="vsel"){S.v.voice=t.value;save()}
+  if(t.id==="vrate"){S.v.rate=t.value;save()}
+  if(t.id==="vpitch"){S.v.pitch=t.value;save()}
+});
+
+// ---- reminders (page must be open) ----
+function check(){
+  const now=Date.now();let ch=false;
+  S.tasks.forEach(t=>{if(!t.done&&t.due&&!t.fired&&new Date(t.due).getTime()<=now){t.fired=true;ch=true;
+    const d=document.createElement("div");d.className="alert";d.textContent="⏰ "+t.text;$("alerts").appendChild(d);
+    try{if("Notification" in window&&Notification.permission==="granted")new Notification("یادآوری",{body:t.text})}catch(e){}
+    if(speakOn)speak("یادآوری: "+t.text)}});
+  if(ch)save();
+}
+setInterval(check,20000);
+try{if("Notification" in window&&Notification.permission==="default")document.addEventListener("click",()=>Notification.requestPermission(),{once:true})}catch(e){}
+try{speechSynthesis.onvoiceschanged=()=>{if(tab==="asst"&&!busy&&!rec)render()}}catch(e){}
+load();render();check();
+</script>
+</body>
+</html>
