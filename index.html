@@ -64,15 +64,15 @@ label{font-size:.8rem;color:var(--mute)}
 <script>
 window.claude={use:async n=>{
 if(n==="sample"){const f=()=>{};f.json=async p=>{
-const k=(localStorage.getItem("mx_gkey")||"").trim();if(!k){const e=new Error("nokey");e.code="nokey";throw e}
+const k=(localStorage.getItem("mx_gkey")||"").replace(/[^\x21-\x7E]/g,"");if(!k){const e=new Error("nokey");e.code="nokey";throw e}
 let last;
-for(const m of ["gemini-3.5-flash","gemini-2.5-flash"]){
+for(const m of ["gemini-3.5-flash","gemini-2.5-flash","gemini-3.1-flash-lite","gemini-2.5-flash-lite","gemini-2.5-flash","gemini-3.1-flash-lite","gemini-2.5-flash-lite"]){
 const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"content-type":"application/json","x-goog-api-key":k},body:JSON.stringify({contents:[{role:"user",parts:[{text:p}]}],generationConfig:{responseMimeType:"application/json"}})});
 if(r.ok){const j=await r.json();const t=((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(x=>x.text||"").join("");return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}
 let msg="";try{msg=(await r.json()).error.message}catch(_){}
 const zero=/limit: 0/.test(msg);
-last=new Error(r.status+": "+msg);last.code=(r.status===429&&!zero)?"rate_limited":"error";
-if(!(r.status===404||(r.status===429&&zero)))break}
+last=new Error("[v4 "+m+"] "+r.status+": "+msg);last.code=(r.status===429&&!zero)?"rate_limited":"error";
+if(r.status===503)await new Promise(z=>setTimeout(z,2500));if(!(r.status===404||r.status===503||(r.status===429&&zero)))break}
 throw last};return f}
 if(n==="downloads")return{save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;a.click()}};
 return null}};
@@ -126,14 +126,14 @@ async function ask(job,text,keep){
 فقط JSON معتبر: {"reply":"","tasks":[{"text":"","space":"شرکت|شخصی","cat":"شرکت: ${CATS["شرکت"].join("/")} | شخصی: ${CATS["شخصی"].join("/")}","urgency":"الان|امروز|این هفته","due":"YYYY-MM-DDTHH:MM محلی یا خالی","project":"نام پروژه یا خالی"}],"projects":[{"name":"","goal":"","owner":"","due":""}],"decisions":[{"text":"","why":""}],"approvals":[{"level":2,"title":"","detail":""}],"done":[]}`;
   let reply="";
   try{
-    const r=await sample.json(prompt,{cache:false});reply=r.reply||"";
-    (r.projects||[]).forEach(p=>{if(p&&p.name&&!S.projects.some(x=>x.name===p.name)){S.projects.push({id:S.n++,name:p.name,goal:p.goal||"",owner:p.owner||"",due:p.due||"",note:""});log("پروژه: "+p.name)}});
-    (r.tasks||[]).forEach(t=>{if(t&&t.text){const sp=t.space==="شخصی"?"شخصی":"شرکت";S.tasks.push({id:S.n++,text:t.text,space:sp,cat:CATS[sp].includes(t.cat)?t.cat:CATS[sp][CATS[sp].length-1],urgency:URG[t.urgency]!==undefined?t.urgency:"این هفته",due:t.due||"",project:t.project||"",done:false,fired:false});log("کار: "+t.text)}});
-    (r.decisions||[]).forEach(d=>{if(d&&d.text){S.memory.unshift({id:S.n++,date:today(),text:d.text,why:d.why||"",src:"گفت‌وگو"});log("تصمیم ثبت شد")}});
-    (r.approvals||[]).forEach(a=>{if(a&&a.title){S.approvals.push({id:S.n++,level:+a.level===3?3:2,title:a.title,detail:a.detail||"",status:"منتظر"});log("درخواست تأیید: "+a.title)}});
-    (r.done||[]).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});
+    const A=x=>Array.isArray(x)?x:[];const r=await sample.json(prompt,{cache:false});if(!r||typeof r!=="object"||Array.isArray(r))throw new Error("پاسخ هوش مصنوعی قالب درستی نداشت؛ دوباره بفرستید");reply=String(r.reply||"");
+    A(r.projects).forEach(p=>{if(p&&p.name&&!S.projects.some(x=>x.name===p.name)){S.projects.push({id:S.n++,name:p.name,goal:p.goal||"",owner:p.owner||"",due:p.due||"",note:""});log("پروژه: "+p.name)}});
+    A(r.tasks).forEach(t=>{if(t&&t.text){const sp=t.space==="شخصی"?"شخصی":"شرکت";S.tasks.push({id:S.n++,text:t.text,space:sp,cat:CATS[sp].includes(t.cat)?t.cat:CATS[sp][CATS[sp].length-1],urgency:URG[t.urgency]!==undefined?t.urgency:"این هفته",due:t.due||"",project:t.project||"",done:false,fired:false});log("کار: "+t.text)}});
+    A(r.decisions).forEach(d=>{if(d&&d.text){S.memory.unshift({id:S.n++,date:today(),text:d.text,why:d.why||"",src:"گفت‌وگو"});log("تصمیم ثبت شد")}});
+    A(r.approvals).forEach(a=>{if(a&&a.title){S.approvals.push({id:S.n++,level:+a.level===3?3:2,title:a.title,detail:a.detail||"",status:"منتظر"});log("درخواست تأیید: "+a.title)}});
+    A(r.done).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});
     save();
-  }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید Gemini را در بخش «کلید Gemini» همین صفحه وارد کنید.":"پاسخ دریافت نشد. علت: "+(e&&e.message||"نامشخص"))}
+  }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید Gemini را در بخش «کلید Gemini» همین صفحه وارد کنید.":"پاسخ دریافت نشد. علت: [v5] "+(e?((e.name||"")+": "+(e.message||"")):"نامشخص"))}
   lastReply=reply;busy=false;orb();say("آماده‌ام");render();
   if(speakOn)await speak(reply);
   if(conv&&tab==="asst")listen();
@@ -224,7 +224,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset&&t.dataset.chk){const k=S.tasks.find(x=>x.id==t.dataset.chk);if(k){k.done=t.checked;log((k.done?"انجام شد: ":"بازگشت: ")+k.text);save();render()}}
-  if(t.id==="akey"&&t.value.trim()){localStorage.setItem("mx_gkey",t.value.trim());t.value="";t.placeholder="ذخیره شد ✓"}if(t.id==="vsel"){S.v.voice=t.value;save()}
+  if(t.id==="akey"&&t.value.trim()){const kk=t.value.replace(/[^\x21-\x7E]/g,"");if(kk.length<20){t.value="";t.placeholder="کلید نامعتبر است؛ باید با AIza شروع شود"}else{localStorage.setItem("mx_gkey",kk);t.value="";t.placeholder="ذخیره شد ✓"}}if(t.id==="vsel"){S.v.voice=t.value;save()}
   if(t.id==="vrate"){S.v.rate=t.value;save()}
   if(t.id==="vpitch"){S.v.pitch=t.value;save()}
 });
