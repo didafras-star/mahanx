@@ -51,11 +51,29 @@ textarea{width:100%;min-height:64px;border:0;outline:0;resize:vertical;backgroun
 .lv{display:inline-block;padding:0 8px;border-radius:9px;font-size:.72rem;font-weight:800;color:#06101c}.l2{background:var(--amb)}.l3{background:var(--hot)}
 select,input[type=range]{width:100%;background:var(--glass);color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:6px;font:inherit}
 label{font-size:.8rem;color:var(--mute)}
+.xin{flex:1;min-width:0;padding:9px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);border-radius:10px;font:inherit}.xcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:10px 0}.xc{padding:10px;text-align:center}.xc b{display:block;font-size:1.6rem}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(140,200,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(140,200,255,.045) 1px,transparent 1px);background-size:34px 34px}
+main{padding-bottom:108px}
+.glass{box-shadow:0 8px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06)}
+.top{position:sticky;top:0;z-index:5;padding:8px 2px;margin-bottom:4px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.nav{position:fixed;right:10px;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:20;display:flex;gap:2px;max-width:680px;margin:0 auto;padding:6px;border-radius:26px;background:rgba(10,16,30,.74);border:1px solid var(--edge);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 10px 40px rgba(0,0,0,.5);overflow:visible}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:0;border-radius:20px;background:transparent;color:var(--mute);font:inherit;font-size:.68rem;cursor:pointer}
+.nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button[aria-pressed="true"]{color:#06101c;background:linear-gradient(135deg,var(--c1),var(--c2));font-weight:800}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+.tile{display:flex;align-items:center;gap:10px;padding:12px;border-radius:18px;border:1px solid var(--edge);background:var(--glass);color:var(--ink);font:inherit;font-size:.85rem;text-align:right;cursor:pointer;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.tile[aria-pressed="true"]{border-color:var(--c1);box-shadow:0 0 18px rgba(34,211,238,.35)}
+.badge{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:13px;font-size:1.25rem;background:linear-gradient(135deg,rgba(34,211,238,.32),rgba(139,92,246,.32));border:1px solid var(--edge)}
+.badge svg{width:22px;height:22px;fill:none;stroke:var(--c1);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+a.sm{text-decoration:none;display:inline-block;color:var(--ink)}
+.sm[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url(bg.jpg) center 6%/min(125vw,780px) no-repeat;opacity:.32;-webkit-mask-image:radial-gradient(ellipse 62% 46% at 50% 26%,#000 0,rgba(0,0,0,.6) 45%,transparent 100%);mask-image:radial-gradient(ellipse 62% 46% at 50% 26%,#000 0,rgba(0,0,0,.6) 45%,transparent 100%)}
+@media (prefers-reduced-motion:no-preference){body::after{animation:bgin 1.2s ease both}}@keyframes bgin{from{opacity:0}to{opacity:.32}}
 </style>
 </head>
 <body>
 <main>
-<div class="top"><h1><span>MAHANX</span> EXECUTIVE AI</h1><div class="stat" id="stat"></div></div>
+<div class="top"><h1><img src="logo.png" alt="" width="30" height="30" style="vertical-align:middle;border-radius:50%;margin-left:8px;box-shadow:0 0 14px rgba(34,211,238,.6)"><span>MAHANX</span> EXECUTIVE AI</h1><div class="stat" id="stat"></div></div>
 <div id="alerts" aria-live="polite"></div>
 <div class="nav" id="nav"></div>
 <div id="view"></div>
@@ -82,7 +100,7 @@ if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWor
 <script>
 const CATS={"شرکت":["فروش","تعمیرات","حسابداری","تأمین","بحران","توسعه","MahanX"],"شخصی":["خانواده","دوستان","مالی","رشد فردی","متفرقه"]};
 const URG={"الان":0,"امروز":1,"این هفته":2};
-const TABS=[["asst","🎙️ دستیار"],["tasks","✅ کارها"],["proj","📦 پروژه‌ها"],["appr","🛡️ تأییدها"],["mem","🧠 حافظه"],["rep","📊 گزارش"]];
+const TABS=[["asst","🎙️ دستیار"],["dash","📈 داشبورد"],["tasks","✅ کارها"],["rec","📒 دفترها"],["tools","🧰 ابزارها"],["proj","📦 پروژه‌ها"],["appr","🛡️ تأییدها"],["mem","🧠 حافظه"],["rep","📊 گزارش"]];
 const MX=["پنل مدیریت مرکزی","پنل مدیران استانی","پنل کشاورزان و کارشناسان","ثبت و مدیریت زمین‌ها","ماشین‌آلات و ارائه‌دهندگان خدمات","سوخت، سهمیه و کیف پول","گزارش‌ها و داشبورد","قابلیت‌های هوش مصنوعی","APIها و سرویس‌های بیرونی","کنترل کیفیت و آزمون"];
 let S={tasks:[],projects:[],approvals:[],memory:[],log:[],n:1,v:{voice:"",rate:.95,pitch:1}};
 let tab="asst",space="همه",busy=false,speakOn=true,conv=false,lastReply="",lastSay="برای صحبت روی گوی بزنید",rec=null,confirm3=null;
@@ -112,7 +130,7 @@ function speak(t){return new Promise(res=>{
 function stopSpeak(){spkId++;try{speechSynthesis.cancel()}catch(e){}orb()}
 
 // ---- AI ----
-const RULES=`تو MAHANX EXECUTIVE AI هستی: دستیار شخصی و مدیر اجرایی شرکت پهپاد کشاورزی و تصویربرداری و اکوسیستم MahanX/AGRIX. فارسی طبیعی و روان، کوتاه و مستقیم و مناسب شنیدن (حداکثر ۵ جمله، بدون ستاره و علامت). اولویت‌ها را با اهمیت، فوریت، اثر مالی، ریسک و وابستگی بسنج. درخواست کلی را به کارهای کوچک تبدیل کن. قانون صداقت: هیچ ابزار بیرونی (ایمیل، پیامک، تقویم، پایگاه داده) متصل نیست؛ هرگز ادعا نکن چیزی ارسال یا اجرا شده، فقط ثبت، برنامه‌ریزی و پیش‌نویس. وجود هر API یا ماژول MahanX را فرض نکن. اقدام سطح ۲ (پیام به مشتری، پیشنهاد تجاری، تعهد، انتشار) و سطح ۳ (پرداخت، قرارداد، حذف دائمی، تغییر مجوز، انتشار نسخه) را فقط در approvals بگذار با پیش‌نویس کامل در detail.`;
+const RULES=`تو MAHANX EXECUTIVE AI هستی: دستیار شخصی و مدیر اجرایی شرکت پهپاد کشاورزی و تصویربرداری و اکوسیستم MahanX/AGRIX. فارسی طبیعی و روان، کوتاه و مستقیم و مناسب شنیدن (حداکثر ۵ جمله، بدون ستاره و علامت). اولویت‌ها را با اهمیت، فوریت، اثر مالی، ریسک و وابستگی بسنج. درخواست کلی را به کارهای کوچک تبدیل کن. قانون صداقت: هیچ ابزار بیرونی (ایمیل، پیامک، تقویم، پایگاه داده) متصل نیست؛ هرگز ادعا نکن چیزی ارسال یا اجرا شده، فقط ثبت، برنامه‌ریزی و پیش‌نویس. وجود هر API یا ماژول MahanX را فرض نکن. اقدام سطح ۲ (پیام به مشتری، پیشنهاد تجاری، تعهد، انتشار) و سطح ۳ (پرداخت، قرارداد، حذف دائمی، تغییر مجوز، انتشار نسخه) را فقط در approvals بگذار با پیش‌نویس کامل در detail. هر تماس لازم یا انجام‌شده (call)، قول داده‌شده به دیگران (promise)، دستگاه تعمیری (repair) و دریافتی یا پرداختی (money) را در records ثبت کن و تاریخ‌ها را دقیق بنویس.`;
 async function ask(job,text,keep){
   if(busy)return;busy=true;orb("think");say("در حال فکر کردن...");
   let sample=null;try{sample=await claude.use("sample")}catch(e){}
@@ -123,7 +141,7 @@ async function ask(job,text,keep){
 وضعیت: ${JSON.stringify(ctx)}
 وظیفه: ${job}
 ورودی مدیر: ${text||"-"}
-فقط JSON معتبر: {"reply":"","tasks":[{"text":"","space":"شرکت|شخصی","cat":"شرکت: ${CATS["شرکت"].join("/")} | شخصی: ${CATS["شخصی"].join("/")}","urgency":"الان|امروز|این هفته","due":"YYYY-MM-DDTHH:MM محلی یا خالی","project":"نام پروژه یا خالی"}],"projects":[{"name":"","goal":"","owner":"","due":""}],"decisions":[{"text":"","why":""}],"approvals":[{"level":2,"title":"","detail":""}],"done":[]}`;
+فقط JSON معتبر: {"reply":"","tasks":[{"text":"","space":"شرکت|شخصی","cat":"شرکت: ${CATS["شرکت"].join("/")} | شخصی: ${CATS["شخصی"].join("/")}","urgency":"الان|امروز|این هفته","due":"YYYY-MM-DDTHH:MM محلی یا خالی","project":"نام پروژه یا خالی"}],"projects":[{"name":"","goal":"","owner":"","due":""}],"decisions":[{"text":"","why":""}],"approvals":[{"level":2,"title":"","detail":""}],"done":[],"records":[{"type":"call|promise|repair|money","who":"","title":"","detail":"","amount":"","kind":"دریافتی|پرداختی","due":"YYYY-MM-DDTHH:MM یا خالی"}]}`;
   let reply="";
   try{
     const A=x=>Array.isArray(x)?x:[];const r=await sample.json(prompt,{cache:false});if(!r||typeof r!=="object"||Array.isArray(r))throw new Error("پاسخ هوش مصنوعی قالب درستی نداشت؛ دوباره بفرستید");reply=String(r.reply||"");
@@ -131,7 +149,7 @@ async function ask(job,text,keep){
     A(r.tasks).forEach(t=>{if(t&&t.text){const sp=t.space==="شخصی"?"شخصی":"شرکت";S.tasks.push({id:S.n++,text:t.text,space:sp,cat:CATS[sp].includes(t.cat)?t.cat:CATS[sp][CATS[sp].length-1],urgency:URG[t.urgency]!==undefined?t.urgency:"این هفته",due:t.due||"",project:t.project||"",done:false,fired:false});log("کار: "+t.text)}});
     A(r.decisions).forEach(d=>{if(d&&d.text){S.memory.unshift({id:S.n++,date:today(),text:d.text,why:d.why||"",src:"گفت‌وگو"});log("تصمیم ثبت شد")}});
     A(r.approvals).forEach(a=>{if(a&&a.title){S.approvals.push({id:S.n++,level:+a.level===3?3:2,title:a.title,detail:a.detail||"",status:"منتظر"});log("درخواست تأیید: "+a.title)}});
-    A(r.done).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});
+    A(r.done).forEach(id=>{const t=S.tasks.find(x=>x.id==id);if(t){t.done=true;log("انجام شد: "+t.text)}});A(r.records).forEach(o=>{if(o&&XS[o.type]){S.rec=S.rec||[];S.rec.push({id:S.n++,type:o.type,who:o.who||"",title:o.title||"",detail:o.detail||"",amount:String(o.amount||""),kind:o.kind||"",due:o.due||"",status:XS[o.type][0],date:today()});log("دفتر: "+(o.who||o.detail||o.type))}});
     save();
   }catch(e){reply=e&&e.code==="rate_limited"?"درخواست‌ها زیاد شد، کمی بعد دوباره بگویید.":(e&&e.code==="nokey"?"ابتدا کلید Gemini را در بخش «کلید Gemini» همین صفحه وارد کنید.":"پاسخ دریافت نشد. علت: [v5] "+(e?((e.name||"")+": "+(e.message||"")):"نامشخص"))}
   lastReply=reply;busy=false;orb();say("آماده‌ام");render();
@@ -156,10 +174,11 @@ function listen(){
 function head(){
   const o=S.tasks.filter(t=>!t.done);
   $("stat").textContent=`${o.length} کار · ${o.filter(t=>t.urgency==="الان").length} فوری · ${S.approvals.filter(a=>a.status==="منتظر").length} منتظر تأیید`;
-  $("nav").innerHTML=TABS.map(([k,l])=>`<button class="sm" data-tab="${k}" aria-pressed="${k===tab}">${l}</button>`).join("");
+  $("nav").innerHTML=navHtml();
 }
 function taskHtml(t){return `<div class="glass item p${URG[t.urgency]??2} ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} data-chk="${t.id}" aria-label="انجام شد"><div class="t"><b>${esc(t.text)}</b><div class="meta">${esc(t.space)} / ${esc(t.cat)} · ${esc(t.urgency)}${t.project?" · 📦 "+esc(t.project):""}${t.due?" · ⏰ "+esc(fmt(t.due)):""}</div></div><button class="x" data-del="${t.id}" aria-label="حذف">✕</button></div>`}
 function view(){
+  if(tab==="dash")return dashView();if(tab==="rec")return recView();if(tab==="tools")return toolsView();
   if(tab==="asst"){
     const vs=voices();const fa=vs.filter(v=>/^fa/i.test(v.lang));const list=fa.length?fa:vs;
     return `<section class="glass hero"><button class="orb" id="orb" data-a="orb" aria-label="صحبت با دستیار"></button><div class="say" id="say">${esc(lastSay)}</div></section>
@@ -241,7 +260,205 @@ function check(){
 setInterval(check,20000);
 try{if("Notification" in window&&Notification.permission==="default")document.addEventListener("click",()=>Notification.requestPermission(),{once:true})}catch(e){}
 try{speechSynthesis.onvoiceschanged=()=>{if(tab==="asst"&&!busy&&!rec)render()}}catch(e){}
-load();render();check();
+addEventListener("DOMContentLoaded",()=>{load();render();check()});
+</script>
+<script>
+const XL={call:"تماس‌ها",promise:"قول‌ها",repair:"تعمیرات",money:"مالی"};
+const XS={call:["منتظر پیگیری","انجام شد"],promise:["باز","انجام شد"],repair:["دریافت‌شده","در حال تعمیر","منتظر قطعه","آماده تحویل","تحویل شد"],money:["معوق","تسویه شد"]};
+const XD=new Set(["انجام شد","تحویل شد","تسویه شد"]);
+const BASE="تو دستیار اجرایی مدیر یک شرکت پهپاد کشاورزی و تصویربرداری هستی. فارسی روان و حرفه‌ای. قیمت، تاریخ، شماره، مشخصات فنی و قوانین را از خودت نساز؛ جای نامعلوم را به شکل [ ... ] خالی بگذار. خروجی متن ساده باشد (بدون ستاره و علامت markdown).";
+const TL=[
+{id:"reply",i:"💬",n:"پاسخ‌یار مشتری",h:"پیام یا یادداشت تماس مشتری را بدهید.",ph:"متن پیام مشتری...",p:"یک پاسخ آماده برای ارسال در واتساپ بنویس، کوتاه و محترمانه. دو نسخه بده: رسمی و صمیمی. اگر اطلاعاتی لازم است که ندارم، آخر یک سؤال کوتاه بنویس."},
+{id:"quote",i:"🧾",n:"پیش‌فاکتور",h:"مشتری، مدل، تعداد و شرایط را بگویید.",ph:"مثلاً: شرکت کشت‌وصنعت X، دو دستگاه پهپاد سمپاش، تحویل ۲۰ روزه...",p:"پیش‌نویس رسمی پیش‌فاکتور یا پیشنهاد قیمت بنویس با بخش‌های: مشخصات، شرایط پرداخت، تحویل، گارانتی. قیمت‌ها را فقط اگر در ورودی هست بنویس وگرنه [ ... ]."},
+{id:"parts",i:"🔩",n:"قطعات و تأمین",h:"موجودی یا نیاز قطعات را بنویسید.",ph:"مثلاً: ملخ ۲ عدد مانده، باتری ۱ عدد، موتور صفر...",p:"اولویت سفارش قطعات را مشخص کن (فوری/این ماه/بعداً) با دلیل، و سؤال‌های لازم برای تأمین‌کننده را فهرست کن."},
+{id:"imp",i:"🚢",n:"واردات و ترخیص",h:"کالا و مبدأ را بنویسید.",ph:"مثلاً: ۱۰ دستگاه پهپاد از چین، ورود با ...",p:"چک‌لیست عمومی مراحل و مدارک معمول واردات و ترخیص را بنویس. در پایان تأکید کن مقررات و تعرفه روز باید با ترخیص‌کار یا گمرک تأیید شود و خودت عدد یا تعرفه نساز."},
+{id:"prop",i:"📄",n:"پروپوزال فروش",h:"مخاطب و نیاز او را بگویید.",ph:"مثلاً: کشاورز ۵۰ هکتاری گندم، می‌خواهد سمپاشی ارزان‌تر کند...",p:"پروپوزال فروش قانع‌کننده و صادقانه بنویس: مشکل مخاطب، راه‌حل با پهپاد، مزایا، مراحل همکاری و گام بعدی. ادعای عددی بدون منبع نساز."},
+{id:"decide",i:"⚖️",n:"مغز تصمیم",h:"تصمیم یا دوراهی را شرح دهید.",ph:"مثلاً: بین واردات مستقیم و خرید از نمایندگی...",save:1,p:"به‌عنوان مشاور صریح پاسخ بده: گزینه‌ها، مزایا و معایب هرکدام، ریسک‌ها، پیشنهاد نهایی با دلیل، و اولین قدم اجرایی."},
+{id:"week",i:"📅",n:"مرور هفتگی",h:"از روی کارها و دفترهای ثبت‌شده.",noin:1,save:1,p:"از روی وضعیت فعلی یک مرور هفتگی بنویس: چه چیز پیش رفته، چه چیز مانده یا عقب‌افتاده، ریسک‌ها، سه اولویت هفته بعد، و یک پیشنهاد برای کم کردن بار کاری."},
+{id:"coach",i:"🌿",n:"مربی رشد فردی",h:"هدف یا وضعیت خود را بگویید.",ph:"مثلاً: وقت کم می‌آورم و برای خانواده زمان نمی‌گذارم...",save:1,p:"مربی دوستانه و عملی باش: یک هدف هفتگی کوچک، سه عادت ساده و قابل‌اجرا، و یک یادآوری ملایم برای تعادل کار و زندگی. توصیه پزشکی نکن."}
+];
+let XT="call",curTool=null,toolOut="",toolIn="",XBUSY=false,scanMsg="",xmsg="";
+const R=()=>(S.rec=S.rec||[]);
+const xover=r=>r.due&&!XD.has(r.status)&&new Date(r.due).getTime()<Date.now();
+const MODELS=["gemini-3.5-flash","gemini-2.5-flash","gemini-3.1-flash-lite","gemini-2.5-flash-lite","gemini-2.5-flash"];
+async function gem(parts){
+ const k=(localStorage.getItem("mx_gkey")||"").replace(/[^\x21-\x7E]/g,"");
+ if(!k)throw new Error("ابتدا کلید Gemini را در بخش دستیار وارد کنید");
+ let last;
+ for(const m of MODELS){
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"content-type":"application/json","x-goog-api-key":k},body:JSON.stringify({contents:[{role:"user",parts}]})});
+  if(r.ok){const j=await r.json();const t=((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(x=>x.text||"").join("");if(t.trim())return t;last=new Error("پاسخ خالی بود");continue}
+  let msg="";try{msg=(await r.json()).error.message}catch(_){}
+  const zero=/limit: 0/.test(msg);last=new Error(r.status+": "+msg);
+  if(r.status===503)await new Promise(z=>setTimeout(z,2500));
+  if(!(r.status===404||r.status===503||(r.status===429&&zero)))break}
+ throw last}
+function xctx(){return{tasks:S.tasks.filter(t=>!t.done).slice(0,30).map(t=>({text:t.text,cat:t.cat,urgency:t.urgency,due:t.due})),records:R().filter(r=>!XD.has(r.status)).slice(0,30).map(r=>({type:r.type,who:r.who,title:r.title,detail:r.detail,due:r.due,status:r.status}))}}
+function recItem(r){return `<div class="glass item ${xover(r)?"p0":"p2"} ${XD.has(r.status)?"done":""}"><div class="t"><b>${esc(r.who||"")}${r.title?" · "+esc(r.title):""}</b><div>${esc(r.detail||"")}</div><div class="meta">${r.amount?esc(r.amount)+" · "+esc(r.kind||"")+" · ":""}${r.due?"⏰ "+esc(fmt(r.due))+(xover(r)?" · عقب‌افتاده":""):""}</div><select data-xst="${r.id}">${XS[r.type].map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select></div><button class="x" data-xdel="${r.id}" aria-label="حذف">✕</button></div>`}
+function recView(){
+ const list=R().filter(r=>r.type===XT).sort((a,b)=>(XD.has(a.status)-XD.has(b.status))||String(a.due||"z").localeCompare(String(b.due||"z")));
+ const ph={call:"نام مشتری / تماس‌گیرنده",promise:"قول به چه کسی؟",repair:"نام مشتری",money:"طرف حساب"};
+ return `<div class="row">${Object.keys(XL).map(k=>`<button class="sm" data-xt="${k}" aria-pressed="${k===XT}">${XL[k]}</button>`).join("")}</div><div class="glass box"><div class="row"><input id="xw" class="xin" placeholder="${ph[XT]}">${XT==="repair"?'<input id="xti" class="xin" placeholder="دستگاه / مدل">':""}</div><input id="xd" class="xin" placeholder="${XT==="money"?"بابت چه؟":XT==="repair"?"مشکل دستگاه":XT==="promise"?"چه قولی داده‌اید؟":"موضوع تماس"}" style="width:100%;margin-top:6px"><div class="row" style="margin-top:6px">${XT==="money"?'<input id="xa" class="xin" placeholder="مبلغ"><select id="xk" class="xin"><option>دریافتی</option><option>پرداختی</option></select>':""}<input id="xdue" type="datetime-local" class="xin"><button class="go" data-xadd="1">افزودن</button></div></div>`+(list.length?list.map(recItem).join(""):`<div class="empty">موردی ثبت نشده. می‌توانید در بخش دستیار هم بگویید.</div>`)}
+function toolsView(){
+ const t=TL.find(x=>x.id===curTool);
+ return `<div class="agents">${TL.map(x=>`<button class="glass ag" data-xtool="${x.id}" aria-pressed="${x.id===curTool}"><b>${x.i}</b>${x.n}</button>`).join("")}<button class="glass ag" data-xscan="1"><b>📷</b>اسکن عکس</button></div><input type="file" id="xfile" accept="image/*" hidden>`+(t?`<div class="glass box"><b>${t.i} ${t.n}</b><div class="meta">${t.h}</div>${t.noin?"":`<textarea id="xin" placeholder="${esc(t.ph)}">${esc(toolIn)}</textarea>`}<div class="row"><button class="go grow" data-xrun="1">${XBUSY?"در حال کار...":"اجرا"}</button></div></div>`:`<div class="empty">یک ابزار را انتخاب کنید.</div>`)+(toolOut?`<div class="glass box">${esc(toolOut)}</div><div class="row"><button class="sm" data-xcopy="1">📋 کپی</button><button class="sm" data-xspeak="1">🔊 بخوان</button>${t&&t.save?'<button class="sm" data-xsave="1">🧠 ذخیره در حافظه</button>':""}</div>`:"")+`<div class="meta" style="margin-top:10px">${esc(scanMsg)}</div><div class="meta">نکته: با کلید رایگان Gemini، اطلاعات حساس مشتری را وارد نکنید.</div>`}
+function focusInfo(){
+ const w=(S.focus||"10:00-11:00,14:00-15:00,18:00-19:00").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).split(",").map(x=>x.trim()).filter(Boolean);
+ const n=new Date(),m=n.getHours()*60+n.getMinutes();let next=null;
+ for(const x of w){const mm=x.match(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/);if(!mm)continue;const a=+mm[1]*60+ +mm[2],b=+mm[3]*60+ +mm[4];
+  if(m>=a&&m<b)return "🟢 الان بازه تماس شماست (تا "+mm[3]+":"+mm[4]+")";
+  if(a>m&&(next===null||a<next[0]))next=[a,mm[1]+":"+mm[2]]}
+ return next?"🔴 الان حالت تمرکز است؛ بازه بعدی تماس ساعت "+next[1]:"🔴 بازه‌های تماس امروز تمام شده؛ بقیه را با پیام پاسخ دهید"}
+function dashView(){
+ const op=S.tasks.filter(t=>!t.done),r=R().filter(x=>!XD.has(x.status));
+ const od=op.filter(t=>t.due&&new Date(t.due).getTime()<Date.now()).length;
+ const cards=[["کار باز",op.length],["کار فوری",op.filter(t=>t.urgency==="الان").length],["کار عقب‌افتاده",od],["قول باز",r.filter(x=>x.type==="promise").length],["تماس منتظر",r.filter(x=>x.type==="call").length],["تعمیر جاری",r.filter(x=>x.type==="repair").length],["مالی معوق",r.filter(x=>x.type==="money").length],["عقب‌افتاده در دفترها",r.filter(xover).length]];
+ const cnt={};op.forEach(t=>cnt[t.cat]=(cnt[t.cat]||0)+1);const ent=Object.entries(cnt).sort((a,b)=>b[1]-a[1]),mx=ent.length?ent[0][1]:1;
+ return `<div class="row">${[["today","🔊 گزارش امروز"],["waiting","📞 چه کسی منتظر من است؟"],["promises","🤝 قول‌های باز"],["repairs","🔧 تعمیرات"]].map(([k,l])=>`<button class="sm" data-xq="${k}">${l}</button>`).join("")}</div>`+(xmsg?`<div class="glass box">${esc(xmsg)}</div>`:"")+`<div class="xcards">${cards.map(([l,v])=>`<div class="glass xc"><b>${v}</b><span class="meta">${l}</span></div>`).join("")}</div><div class="glass box"><b>🎯 حالت تمرکز</b><div>${focusInfo()}</div><label>بازه‌های تماس (مثال: 10:00-11:00, 14:00-15:00)</label><input id="xfocus" class="xin" style="width:100%" value="${esc(S.focus||"10:00-11:00,14:00-15:00,18:00-19:00")}"></div><div class="glass box"><b>کارهای باز به تفکیک دسته</b>${ent.length?ent.map(([c,n])=>`<div class="meta">${esc(c)} (${n})</div><div class="bar"><i style="width:${Math.round(n/mx*100)}%"></i></div>`).join(""):'<div class="meta">کار بازی نیست.</div>'}</div>`}
+function quick(k){
+ const op=R().filter(r=>!XD.has(r.status));let m="";
+ if(k==="today"){const ts=S.tasks.filter(t=>!t.done).sort((a,b)=>(URG[a.urgency]??2)-(URG[b.urgency]??2));m=ts.length?`امروز ${ts.length} کار باز دارید. مهم‌ترین‌ها: `+ts.slice(0,3).map(t=>t.text).join("، ")+".":"کار بازی ندارید.";const ov=op.filter(xover).length;if(ov)m+=` ${ov} مورد در دفترها عقب‌افتاده است.`}
+ if(k==="waiting"){const c=op.filter(r=>r.type==="call");m=c.length?"منتظر پاسخ یا پیگیری شما: "+c.map(r=>r.who||r.detail).join("، ")+".":"کسی منتظر پاسخ شما نیست."}
+ if(k==="promises"){const p=op.filter(r=>r.type==="promise");m=p.length?`${p.length} قول باز دارید: `+p.slice(0,5).map(r=>`${r.who||""}، ${r.detail||""}${xover(r)?" (عقب‌افتاده)":""}`).join(". ")+".":"قول بازی ندارید."}
+ if(k==="repairs"){const p=op.filter(r=>r.type==="repair");m=p.length?`${p.length} دستگاه در تعمیر یا منتظر تحویل است: `+p.slice(0,5).map(r=>`${r.title||r.who}، ${r.status}`).join(". ")+".":"دستگاهی در تعمیر ثبت نشده."}
+ xmsg=m;render();if(speakOn)speak(m)}
+async function runTool(){
+ const t=TL.find(x=>x.id===curTool);if(!t||XBUSY)return;
+ toolIn=$("xin")?$("xin").value.trim():"";
+ if(!t.noin&&!toolIn){toolOut="ابتدا متن را وارد کنید.";render();return}
+ XBUSY=true;toolOut="در حال نوشتن...";render();
+ try{toolOut=(await gem([{text:BASE+"\n"+t.p+"\n\nوضعیت فعلی (برای هماهنگی): "+JSON.stringify(xctx())+"\n\nورودی مدیر:\n"+(toolIn||"-")}])).replace(/[*#`]/g,"").trim()}
+ catch(e){toolOut="پاسخ دریافت نشد. علت: "+(e&&e.message||"نامشخص")}
+ XBUSY=false;render()}
+async function scan(f){
+ scanMsg="در حال خواندن تصویر...";render();
+ try{
+  const b64=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1024/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8).split(",")[1])};im.onerror=()=>rej(new Error("تصویر خوانده نشد"));im.src=URL.createObjectURL(f)});
+  const t=await gem([{text:'این تصویر (فاکتور، کارت ویزیت، برگه تعمیر یا یادداشت) را بخوان و فقط JSON بده: {"type":"call|promise|repair|money","who":"","title":"","detail":"","amount":"","kind":"دریافتی|پرداختی","due":"","summary":"خلاصه یک‌جمله"}. هرچه خوانا نیست خالی بگذار و چیزی نساز. فاکتور=money، برگه تعمیر=repair، کارت ویزیت=call.'},{inline_data:{mime_type:"image/jpeg",data:b64}}]);
+  const o=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1));
+  const ty=["call","promise","repair","money"].includes(o.type)?o.type:"call";
+  R().push({id:S.n++,type:ty,who:o.who||"",title:o.title||"",detail:o.detail||"",amount:String(o.amount||""),kind:o.kind||"",due:o.due||"",status:XS[ty][0],date:today()});
+  log("اسکن: "+(o.summary||ty));save();scanMsg="ثبت شد در دفتر «"+XL[ty]+"»: "+(o.summary||"")+" (بررسی و اصلاح کنید)";
+ }catch(e){scanMsg="اسکن ناموفق: "+(e&&e.message||"نامشخص")}
+ render()}
+function addFromForm(){
+ const g=id=>($(id)?$(id).value.trim():"");
+ const o={id:S.n++,type:XT,who:g("xw"),title:g("xti"),detail:g("xd"),amount:g("xa"),kind:g("xk"),due:g("xdue"),status:XS[XT][0],date:today()};
+ if(!o.who&&!o.detail)return;R().push(o);log("ثبت "+XL[XT]+": "+(o.who||o.detail));save();render()}
+document.addEventListener("click",async e=>{
+ const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+ if(d.xt){XT=d.xt;render()}
+ else if(d.xadd)addFromForm();
+ else if(d.xdel){S.rec=R().filter(r=>r.id!=d.xdel);save();render()}
+ else if(d.xtool){curTool=d.xtool;toolOut="";toolIn="";render()}
+ else if(d.xrun)runTool();
+ else if(d.xcopy){try{await navigator.clipboard.writeText(toolOut);b.textContent="کپی شد ✓"}catch(_){b.textContent="کپی ممکن نیست"}}
+ else if(d.xspeak)speak(toolOut);
+ else if(d.xsave){const t=TL.find(x=>x.id===curTool)||{};S.memory.unshift({id:S.n++,date:today(),text:toolOut.slice(0,600),why:"ابزار: "+(t.n||""),src:"ابزار"});save();b.textContent="ذخیره شد ✓"}
+ else if(d.xq)quick(d.xq);
+ else if(d.xscan){const f=$("xfile");if(f)f.click()}
+});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.dataset&&t.dataset.xst){const r=R().find(x=>x.id==t.dataset.xst);if(r){r.status=t.value;save();render()}}
+ if(t.id==="xfile"&&t.files&&t.files[0]){const f=t.files[0];t.value="";scan(f)}
+ if(t.id==="xfocus"){S.focus=t.value;save();render()}
+});
+setInterval(()=>{const n=Date.now();let ch=false;R().forEach(r=>{if(!XD.has(r.status)&&r.due&&!r.fired&&new Date(r.due).getTime()<=n){r.fired=true;ch=true;const m=XL[r.type]+": "+(r.who||"")+" "+(r.detail||r.title||"");const d=document.createElement("div");d.className="alert";d.textContent="⏰ "+m;$("alerts").appendChild(d);if(speakOn)speak("یادآوری "+m)}});if(ch)save()},20000);
+</script>
+<script>
+const ICO={mic:'<path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',tasks:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 3 3 5-6"/>',book:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M8 17h11"/>',grid:'<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',wrench:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z"/>',box:'<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="m3 7.5 9 4.5 9-4.5M12 12v9"/>',shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',brain:'<path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 3 5 3 3 0 0 0 5 1V5a2 2 0 0 0-3-1z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-3 5 3 3 0 0 1-5 1"/>',doc:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',send:'<path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m10 13 11-10"/>'};
+const svg=n=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
+TL.push(
+{id:"follow",i:"🔔",n:"پیگیر مشتری",h:"وضعیت مشتری را بنویسید.",ph:"مثلاً: دو هفته پیش قیمت دادم و جواب نداده...",p:"یک برنامه پیگیری سه‌مرحله‌ای (روز ۲، ۵ و ۱۰) با سه پیام کوتاه و محترمانه برای واتساپ بنویس که فشار نیاورد و ارزش جدید بدهد."},
+{id:"negot",i:"🤝",n:"مذاکره",h:"پیشنهاد یا اعتراض مشتری را بنویسید.",ph:"مثلاً: مشتری ۲۰٪ تخفیف می‌خواهد...",p:"به‌عنوان مذاکره‌کننده حرفه‌ای: خواسته واقعی احتمالی طرف مقابل، سه پاسخ پیشنهادی (نرم، متوازن، محکم) و امتیازهای قابل‌معامله را بنویس. عدد از خودت نساز."},
+{id:"market",i:"🧭",n:"بازار و رقبا",h:"محصول یا بازار هدف را بنویسید.",ph:"مثلاً: سمپاش پهپادی برای مزارع گندم...",p:"چارچوب تحلیل بازار و رقبا بنویس: بخش‌های مشتری، نیازها، تمایز ما، سؤال‌هایی که باید تحقیق شوند. آمار و نام رقیب را نساز؛ فقط ساختار و سؤال‌های تحقیق بده."},
+{id:"post",i:"📣",n:"محتوا و پست",h:"موضوع پست را بنویسید.",ph:"مثلاً: معرفی پهپاد نقشه‌برداری برای کشاورزان...",p:"سه پست فارسی کوتاه برای اینستاگرام یا لینکدین بنویس با تیتر، متن و هشتگ. ادعای نادرست یا عدد بی‌منبع ننویس."},
+{id:"trans",i:"🌐",n:"مکاتبه تجاری",h:"متن یا هدف نامه را بنویسید.",ph:"مثلاً: ایمیل به تأمین‌کننده چینی درباره تأخیر محموله...",p:"ایمیل تجاری حرفه‌ای بنویس: نسخه فارسی و نسخه انگلیسی (در صورت نیاز چینی ساده)، با موضوع، متن و درخواست مشخص. جزئیات نامعلوم را [ ... ] بگذار."},
+{id:"meet",i:"📝",n:"خلاصه جلسه",h:"یادداشت جلسه یا تماس را بدهید.",ph:"یادداشت خام جلسه...",ext:1,p:"خلاصه جلسه را بنویس: تصمیم‌ها، کارها با مسئول و موعد، و موارد نامشخص."},
+{id:"day",i:"🗓️",n:"برنامه روز",h:"از روی کارها، برنامه ساعت‌به‌ساعت می‌سازد.",noin:1,ext:1,p:"برای امروز برنامه ساعت‌به‌ساعت بساز: بلوک تمرکز، بازه‌های تماس، کارهای فوری، استراحت. بیش از ظرفیت واقعی نچین."},
+{id:"risk",i:"🛡️",n:"ارزیابی ریسک",h:"پروژه یا محموله را شرح دهید.",ph:"مثلاً: ورود ۵۰ باتری لیتیومی از خارج...",save:1,p:"ریسک‌ها را فهرست کن با احتمال و اثر (کم/متوسط/زیاد)، راه کاهش هرکدام و اقدام قبل از شروع. قوانین و تعرفه را نساز و پیشنهاد کن با کارشناس تأیید شود."}
+);
+function toolsView(){
+ const t=TL.find(x=>x.id===curTool);
+ const lnk=toolOut&&!XBUSY?"https://wa.me/?text="+encodeURIComponent(toolOut):"";
+ return `<div class="tgrid">${TL.map(x=>`<button class="tile" data-xtool="${x.id}" aria-pressed="${x.id===curTool}"><span class="badge">${x.i}</span><b>${x.n}</b></button>`).join("")}<button class="tile" data-xscan="1"><span class="badge">📷</span><b>اسکن عکس</b></button></div><input type="file" id="xfile" accept="image/*" hidden>`+(t?`<div class="glass box"><b>${t.i} ${t.n}</b><div class="meta">${t.h}</div>${t.noin?"":`<textarea id="xin" placeholder="${esc(t.ph)}">${esc(toolIn)}</textarea>`}<div class="row"><button class="go grow" data-xrun="1">${XBUSY?"در حال کار...":"اجرا"}</button></div></div>`:`<div class="empty">یک ایجنت را انتخاب کنید.</div>`)+(toolOut?`<div class="glass box">${esc(toolOut)}</div><div class="row"><button class="sm" data-xcopy="1">📋 کپی</button><button class="sm" data-xspeak="1">🔊 بخوان</button><a class="sm" href="${lnk}" target="_blank" rel="noopener">💬 واتساپ</a><button class="sm" data-ttg="1">✈️ تلگرام من</button>${t&&t.save?'<button class="sm" data-xsave="1">🧠 حافظه</button>':""}${t&&t.ext?'<button class="sm" data-xmk="1">✅ استخراج کار</button>':""}</div>`:"")+`<div class="meta" style="margin-top:10px">${esc(scanMsg)}</div><div class="meta">نکته: با کلید رایگان Gemini، اطلاعات حساس مشتری را وارد نکنید.</div>`}
+// ---- WhatsApp / Telegram ----
+const LS=k=>localStorage.getItem(k)||"";
+const nd=s=>String(s||"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
+function phoneDigits(p){let d=nd(p).replace(/\D/g,"");if(d.startsWith("00"))d=d.slice(2);else if(d.startsWith("0"))d=(S.cc||"98")+d.slice(1);return d}
+function msgFor(r){const h="سلام "+(r.who?r.who+" عزیز":"")+"، وقت بخیر. ";
+ if(r.type==="repair")return h+`دستگاه ${r.title||""} شما در وضعیت «${r.status}» است.`+(r.status==="آماده تحویل"?" می‌توانید برای تحویل هماهنگ کنید.":" هر خبر تازه‌ای باشد اطلاع می‌دهم.");
+ if(r.type==="money")return h+`یادآوری ${r.detail||"مورد مالی"}${r.amount?" به مبلغ "+r.amount:""}`+(r.kind==="دریافتی"?". لطفاً در اولین فرصت اقدام بفرمایید.":". پیگیری آن در دست اقدام است.");
+ if(r.type==="promise")return h+`درباره ${r.detail||"موضوع قبلی"} پیگیری می‌کنم و در اولین فرصت نتیجه را اطلاع می‌دهم.`;
+ return h+`درباره ${r.detail||"موضوع قبلی"} تماس گرفته بودم. لطفاً زمان مناسب برای صحبت را بفرمایید.`}
+function recItem(r){const d=phoneDigits(r.phone);
+ const act=d?`<div class="row" style="margin-top:6px"><a class="sm" href="https://wa.me/${d}?text=${encodeURIComponent(msgFor(r))}" target="_blank" rel="noopener">💬 واتساپ با پیام آماده</a><a class="sm" href="https://t.me/+${d}" target="_blank" rel="noopener">✈️ تلگرام</a></div>`:`<input class="xin" data-xph="${r.id}" placeholder="شماره برای ارسال پیام (مثلاً 0912...)" style="width:100%;margin-top:6px">`;
+ return `<div class="glass item ${xover(r)?"p0":"p2"} ${XD.has(r.status)?"done":""}"><div class="t"><b>${esc(r.who||"")}${r.title?" · "+esc(r.title):""}</b><div>${esc(r.detail||"")}</div><div class="meta">${r.amount?esc(r.amount)+" · "+esc(r.kind||"")+" · ":""}${r.due?"⏰ "+esc(fmt(r.due))+(xover(r)?" · عقب‌افتاده":""):""}</div><select data-xst="${r.id}">${XS[r.type].map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select>${act}</div><button class="x" data-xdel="${r.id}" aria-label="حذف">✕</button></div>`}
+const _rv=recView;
+recView=function(){return _rv().replace('<input id="xdue"','<input id="xp" class="xin" placeholder="شماره (اختیاری)"><input id="xdue"')};
+addFromForm=function(){const g=id=>($(id)?$(id).value.trim():"");
+ const o={id:S.n++,type:XT,who:g("xw"),title:g("xti"),detail:g("xd"),amount:g("xa"),kind:g("xk"),phone:g("xp"),due:g("xdue"),status:XS[XT][0],date:today()};
+ if(!o.who&&!o.detail)return;R().push(o);log("ثبت "+XL[XT]+": "+(o.who||o.detail));save();render()};
+let tgMsg="";
+async function tgSend(text){const t=LS("mx_tgt"),c=LS("mx_tgc");if(!t||!c)throw new Error("ابتدا توکن و Chat ID را ذخیره کنید");
+ const r=await fetch("https://api.telegram.org/bot"+t+"/sendMessage",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({chat_id:c,text:String(text).slice(0,4000)})});
+ const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw new Error(j.description||("خطا "+r.status));return true}
+async function tgNotify(t){if(LS("mx_tgon")==="1"){try{await tgSend("⏰ "+t)}catch(e){}}}
+function digest(k){const op=S.tasks.filter(t=>!t.done).sort((a,b)=>(URG[a.urgency]??2)-(URG[b.urgency]??2)),r=R().filter(x=>!XD.has(x.status));
+ const L=[k==="m"?"🌅 گزارش صبحگاهی":"🌙 گزارش پایان روز","",`کار باز: ${op.length} | فوری: ${op.filter(t=>t.urgency==="الان").length}`];
+ if(op.length)L.push("","✅ مهم‌ترین کارها:",...op.slice(0,5).map(t=>"• "+t.text));
+ const p=r.filter(x=>x.type==="promise");if(p.length)L.push("","🤝 قول‌های باز:",...p.slice(0,5).map(x=>"• "+(x.who||"")+" - "+(x.detail||"")+(xover(x)?" (عقب‌افتاده)":"")));
+ const c=r.filter(x=>x.type==="call");if(c.length)L.push("","📞 منتظر پیگیری: "+c.map(x=>x.who||x.detail).join("، "));
+ const q=r.filter(x=>x.type==="repair");if(q.length)L.push("","🔧 تعمیرات جاری: "+q.length);
+ const ov=r.filter(xover).length;if(ov)L.push("","⚠️ عقب‌افتاده در دفترها: "+ov);
+ return L.join("\n")}
+function tgView(){const on=LS("mx_tgon")==="1";
+ return `<div class="glass box"><b>✈️ تلگرام (پیام خودکار به خودتان)</b><div class="meta">ربات شما گزارش و یادآوری را در تلگرام خودتان می‌فرستد. فقط وقتی برنامه باز است کار می‌کند.</div>
+<details style="margin:8px 0"><summary>راهنمای ساخت ربات (۲ دقیقه)</summary><div class="meta">۱) در تلگرام @BotFather را باز کنید، /newbot بزنید، نام و نام کاربری بدهید و توکن را کپی کنید. ۲) ربات خودتان را باز کنید و Start بزنید و یک پیام بفرستید. ۳) توکن را اینجا بگذارید و «پیدا کردن Chat ID» را بزنید.</div></details>
+<input id="tgt" type="password" class="xin" style="width:100%;margin-bottom:6px" placeholder="${LS("mx_tgt")?"توکن ذخیره شده ✓ (برای تغییر، توکن جدید)":"توکن ربات"}">
+<input id="tgc" class="xin" style="width:100%" value="${esc(LS("mx_tgc"))}" placeholder="Chat ID">
+<div class="row" style="margin-top:8px"><button class="sm" data-tg="save">ذخیره</button><button class="sm" data-tg="find">پیدا کردن Chat ID</button><button class="sm" data-tg="test">ارسال تست</button></div>
+<div class="row" style="margin-top:8px"><button class="sm" data-tg="toggle" aria-pressed="${on}">${on?"✓ یادآوری‌ها به تلگرام می‌روند":"ارسال خودکار یادآوری‌ها به تلگرام"}</button></div>
+<div class="row" style="margin-top:8px"><button class="sm" data-tg="m">🌅 ارسال گزارش صبحگاهی</button><button class="sm" data-tg="e">🌙 ارسال گزارش پایان روز</button></div>
+<label>گزارش خودکار روزانه (ساعت، مثلاً 08:00، وقتی برنامه باز است)</label><input id="tgtime" class="xin" style="width:100%" value="${esc(LS("mx_tgtime"))}" placeholder="08:00">
+<div class="meta">${esc(tgMsg)}</div></div>
+<div class="glass box"><b>💬 واتساپ</b><div class="meta">ارسال کاملاً خودکار واتساپ بدون API رسمی ممکن نیست. در «دفترها» برای هر مشتری با شماره، دکمه واتساپ پیام آماده را باز می‌کند و شما فقط «ارسال» را می‌زنید. پیش‌شماره کشور برای شماره‌هایی که با 0 شروع می‌شوند:</div><input id="tgcc" class="xin" value="${esc(S.cc||"98")}" style="width:100%"></div>
+<div class="meta">توکن فقط روی همین گوشی می‌ماند. اگر تلگرام در منطقه شما فیلتر است، ممکن است به VPN نیاز باشد.</div>`}
+const MORE=[["tools","ایجنت‌ها و ابزارها","wrench"],["proj","پروژه‌ها","box"],["appr","تأییدها","shield"],["mem","حافظه","brain"],["rep","گزارش‌ها","doc"],["tg","تلگرام و واتساپ","send"]];
+function moreView(){return `<div class="tgrid">${MORE.map(([k,l,i])=>`<button class="tile" data-tab="${k}"><span class="badge">${svg(i)}</span><b>${l}</b></button>`).join("")}</div>`}
+const _view=view;
+view=function(){
+ if(tab==="more")return moreView();
+ const h=tab==="tg"?tgView():_view();
+ return ["tools","proj","appr","mem","rep","tg"].includes(tab)?`<button class="sm" data-tab="more" style="margin-bottom:8px">← بیشتر</button>`+h:h};
+function navHtml(){const NV=[["asst","mic","دستیار"],["dash","chart","داشبورد"],["tasks","tasks","کارها"],["rec","book","دفترها"],["more","grid","بیشتر"]];
+ const mo=["more","tools","proj","appr","mem","rep","tg"].includes(tab);
+ return NV.map(([k,i,l])=>`<button data-tab="${k}" aria-pressed="${k==="more"?mo:k===tab}">${svg(i)}<span>${l}</span></button>`).join("")}
+document.addEventListener("click",async e=>{
+ const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+ if(d.ttg){try{await tgSend(toolOut);b.textContent="ارسال شد ✓"}catch(x){b.textContent="خطا: "+x.message}}
+ else if(d.xmk){tab="tasks";ask("از متن زیر کارها و قول‌ها را استخراج و ثبت کن (کار در tasks و قول‌ها یا تماس‌ها در records).",toolOut)}
+ else if(d.tg){
+  const g=id=>($(id)?$(id).value.trim():"");
+  try{
+   if(d.tg==="save"){const t=g("tgt").replace(/\s/g,""),c=g("tgc").replace(/\s/g,"");if(t)localStorage.setItem("mx_tgt",t);if(c)localStorage.setItem("mx_tgc",c);localStorage.setItem("mx_tgtime",g("tgtime"));const cc=nd(g("tgcc")).replace(/\D/g,"");if(cc){S.cc=cc;save()}tgMsg="ذخیره شد ✓"}
+   if(d.tg==="find"){const t=g("tgt").replace(/\s/g,"")||LS("mx_tgt");if(!t)throw new Error("اول توکن را وارد کنید");localStorage.setItem("mx_tgt",t);
+    const r=await fetch("https://api.telegram.org/bot"+t+"/getUpdates");const j=await r.json();if(!j.ok)throw new Error(j.description||"توکن نادرست است");
+    const u=(j.result||[]).map(x=>x.message||x.edited_message).filter(Boolean).pop();if(!u)throw new Error("پیامی پیدا نشد؛ در تلگرام به ربات یک پیام بفرستید و دوباره بزنید");
+    localStorage.setItem("mx_tgc",String(u.chat.id));tgMsg="Chat ID پیدا و ذخیره شد ✓"}
+   if(d.tg==="test"){await tgSend("✅ اتصال MahanX AI برقرار است.");tgMsg="پیام تست ارسال شد ✓"}
+   if(d.tg==="toggle"){localStorage.setItem("mx_tgon",LS("mx_tgon")==="1"?"0":"1");tgMsg=""}
+   if(d.tg==="m"||d.tg==="e"){await tgSend(digest(d.tg));tgMsg="گزارش ارسال شد ✓"}
+  }catch(x){tgMsg="خطا: "+(x.message||"نامشخص")}
+  render()}
+});
+document.addEventListener("change",e=>{const t=e.target;
+ if(t.dataset&&t.dataset.xph){const r=R().find(x=>x.id==t.dataset.xph);if(r&&t.value.trim()){r.phone=t.value.trim();save();render()}}});
+try{new MutationObserver(m=>m.forEach(x=>x.addedNodes.forEach(n=>{if(n.classList&&n.classList.contains("alert"))tgNotify(n.textContent)}))).observe($("alerts"),{childList:true})}catch(e){}
+setInterval(async()=>{const tm=nd(LS("mx_tgtime")).trim();if(!/^\d{1,2}:\d{2}$/.test(tm)||!LS("mx_tgt"))return;
+ const n=new Date(),hm=("0"+n.getHours()).slice(-2)+":"+("0"+n.getMinutes()).slice(-2),key=n.toDateString();
+ if(hm>=("0"+tm).slice(-5)&&LS("mx_tgsent")!==key){localStorage.setItem("mx_tgsent",key);try{await tgSend(digest("m"))}catch(e){}}},30000);
 </script>
 </body>
 </html>
